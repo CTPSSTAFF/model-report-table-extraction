@@ -23,7 +23,7 @@
 # It was, however, intended to be as easy to understand by a 'newbie' as possible.
 #
 # Author: Benjamin Krepp
-# Date: 23-27 July, 30-31 July, 6-10 August 2018, 13 August 2018
+# Date: 23-27 July, 30-31 July, 6-10 August 2018, 13 August 2018, 21 August 2018
 #   
 # Internals of this Module: Top-level Functions
 # =============================================
@@ -122,8 +122,8 @@ debug_flags['dump_sched_elements'] = False
 
 # Global pseudo-constants:
 # Width of table HEADER cells in the schedule table
-SCHED_HEADER_CELL_WITDH_IN_PTS_12PX_BORDER = 33.9375
-SCHED_HEADER_CELL_WITDH_IN_PX_12PX_BORDER = (SCHED_HEADER_CELL_WITDH_IN_PTS_12PX_BORDER * 1.3333)
+SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER = 33.9375
+SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER = (SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER * 1.3333)
 SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER = 16.59375
 SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER = (SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER * 1.3333)
 
@@ -167,7 +167,7 @@ def col_ix_to_temporal_string(col_ix, xlsInfo):
 # end_def_col_ix_to_temporal_string()
 
 def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
-    global SCHED_HEADER_CELL_WITDH_IN_PX_12PX_BORDER, SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER
+    global SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER, SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER
     global debug_flags
 
     t1 = '<td colspan="' + str(xlsInfo['num_sched_col_header_cells']) + '" '
@@ -267,9 +267,9 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
     #     4. the number of minor schedule units per major schedule unit in the input .xlsx file
     
     if xlsInfo['num_sched_col_header_cells'] <= 12:
-        hdr_cell_width = SCHED_HEADER_CELL_WITDH_IN_PX_12PX_BORDER
+        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER
     else:
-        hdr_cell_width = SCHED_HEADER_CELL_WITDH_IN_PX_24PX_BORDER
+        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER
     # end_if
 
     # Width of 'virtual' cell for one subdivision of the major schedule unit
@@ -473,7 +473,7 @@ def gen_ex1_milestone_div(htmlAcc, xlsInfo):
         return s.strip() == ''
     # end_def is_empty()
     
-    first_milestone_ix = xlsInfo['milestones_list_first_row_ix']
+    first_milestone_ix = xlsInfo['milestone_list_first_row_ix']
     # Find the last row of the milestones list: crawl down milestone_label_column
     # until the first row containing an 'empty' cell is found. 
     last_milestone_ix = first_milestone_ix + 1
@@ -1025,17 +1025,17 @@ def write_html_to_file(html, filename):
 # end_def write_html_to_file()
 
 # Main driver routine - this function does NOT launch a GUI.
-def main(fullpath):
+def main(input_fullpath, output_dir):
     htmlAcc = stringAccumulator()
-    t1 = os.path.split(fullpath)
+    t1 = os.path.split(input_fullpath)
     in_dir = t1[0]
     in_fn = t1[1]
     in_fn_wo_suffix = os.path.splitext(in_fn)[0]
-    ex_1_out_html_fn = in_dir + '\\' + in_fn_wo_suffix + '_Exhibit_1.html'
-    ex_2_out_html_fn = in_dir + '\\' + in_fn_wo_suffix + '_Exhibit_2.html'
+    ex_1_out_html_fn = output_dir + '\\' + in_fn_wo_suffix + '_Exhibit_1.html'
+    ex_2_out_html_fn = output_dir + '\\' + in_fn_wo_suffix + '_Exhibit_2.html'
     
     # Collect 'navigation' information from input .xlsx file
-    xlsInfo = initExcelFile(fullpath)
+    xlsInfo = initExcelFile(input_fullpath)
     if xlsInfo['errors'] == '':
         # Generate Exhibit 1 HTML, and save it to disk
         gen_exhibit_1(htmlAcc, xlsInfo)
@@ -1049,10 +1049,3 @@ def main(fullpath):
         print xlsInfo['errors']        
     # end_if
 # end_def main()
-
-# If this module has been invoked from the command line, the following statement
-# ensures that the function "main" is called with the first parameter that was 
-# passed on the command line, e.g.,
-#     c:\Python27\python.exe -m workscope_exhibit_generator full_path_to_xlsx_file
-if __name__== "__main__":
-    main(sys.argv[1])

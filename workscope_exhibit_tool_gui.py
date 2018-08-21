@@ -7,7 +7,7 @@
 #       <Python_installation_folder>/python.exe -m pip install wxPython
 #
 # Author: Benjamin Krepp
-# Date: 1 August 2018
+# Date: 1 August, 21 August 2018
 #
 
 import wx, wx.html
@@ -51,9 +51,12 @@ class AboutBox(wx.Dialog):
 
 # This is the class for the main GUI itself.
 class Frame(wx.Frame):
+    # Name of input Excel file
     xlsxFileName = ''
+    # Name of directory into which generated HTML files will be written
+    outputDirName = ''
     def __init__(self, title):
-        wx.Frame.__init__(self, None, title=title, pos=(150,150), size=(600,250),
+        wx.Frame.__init__(self, None, title=title, pos=(250,250), size=(800,450),
                           style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -79,6 +82,11 @@ class Frame(wx.Frame):
         box.Add(m_select_file, 0, wx.CENTER)
         box.AddSpacer(20)
         
+        m_select_output_dir = wx.Button(panel, wx.ID_ANY, "Specify output directory")
+        m_select_output_dir.Bind(wx.EVT_BUTTON, self.OnSelectOutputDir)
+        box.Add(m_select_output_dir, 0, wx.CENTER)
+        box.AddSpacer(20)       
+        
         m_generate = wx.Button(panel, wx.ID_ANY, "Generate HTML for Exhibits")
         m_generate.Bind(wx.EVT_BUTTON, self.OnGenerate)
         box.Add(m_generate, 0, wx.CENTER)
@@ -88,6 +96,12 @@ class Frame(wx.Frame):
         self.m_text.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL))
         self.m_text.SetSize(self.m_text.GetBestSize())
         box.Add(self.m_text, 0, wx.ALL, 10)      
+        
+        # Placeholder for name of selected output directory; it is populated in OnSelectOutputDir().
+        self.m_text_2 = wx.StaticText(panel, -1, " ")
+        self.m_text_2.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL))
+        self.m_text_2.SetSize(self.m_text.GetBestSize())
+        box.Add(self.m_text_2, 0, wx.ALL, 10)             
         
         panel.SetSizer(box)
         panel.Layout()
@@ -107,13 +121,25 @@ class Frame(wx.Frame):
         frame = wx.Frame(None, -1, 'win.py')
         frame.SetSize(0,0,200,50)
         openFileDialog = wx.FileDialog(frame, "Select workscope exhibit spreadsheet", "", "", 
-                                       "Excel files (*.xlsx)|*.xlsx", 
+                                       "Excel files (*.xlsx;*.xlsm)|*.xlsx;*.xlsm", 
                                        wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
         openFileDialog.ShowModal()
         self.xlsxFileName = openFileDialog.GetPath()
-        self.m_text.SetLabel("Selected .xlsx file: " + self.xlsxFileName)
+        self.m_text.SetLabel("Selected input Excel file:\n" + self.xlsxFileName)
         openFileDialog.Destroy()
     # end_def OnSelectFile()
+    
+    # new code here
+    def OnSelectOutputDir(self, event):
+        frame = wx.Frame(None, -1, 'win.py')
+        frame.SetSize(0,0,200,50)
+        dlg = wx.DirDialog(None, "Specify output directory", "",
+                           wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+        dlg.ShowModal()
+        self.outputDirName = dlg.GetPath()
+        self.m_text_2.SetLabel("Selected output directory:\n" + self.outputDirName)
+        dlg.Destroy()
+    # end_def OnSelectOutputDir()   
     
     def OnGenerate(self, event):
         dlg = wx.MessageDialog(self, 
@@ -122,7 +148,7 @@ class Frame(wx.Frame):
         result = dlg.ShowModal()
         dlg.Destroy()
         if result == wx.ID_OK:
-            main(self.xlsxFileName)
+            main(self.xlsxFileName, self.outputDirName)
             message = "HTML for workscope exhibits generated."
             caption = "Work Scope Exhibit Tool"
             dlg = wx.MessageDialog(None, message, caption, wx.OK | wx.ICON_INFORMATION)
