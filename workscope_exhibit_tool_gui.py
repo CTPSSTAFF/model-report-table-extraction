@@ -129,7 +129,6 @@ class Frame(wx.Frame):
         openFileDialog.Destroy()
     # end_def OnSelectFile()
     
-    # new code here
     def OnSelectOutputDir(self, event):
         frame = wx.Frame(None, -1, 'win.py')
         frame.SetSize(0,0,200,50)
