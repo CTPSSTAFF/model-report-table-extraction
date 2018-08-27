@@ -84,9 +84,9 @@
 # gen_ex2_funding_div - generates div with list of funding source(s)
 #
 # gen_ex2_salary_cost_table_div - generates the div containing the salary cost table;
-#                                 calls gen_task_tr. 
+#                                 calls gen_ex2_task_tr. 
 #
-# gen_task_tr - generates row for a given task in the salary cost table
+# gen_ex2_task_tr - generates row for a given task in the salary cost table
 #
 # Internals of this Module: Utility Functions
 # ===========================================
@@ -166,7 +166,7 @@ def col_ix_to_temporal_string(col_ix, xlsInfo):
     return retval
 # end_def_col_ix_to_temporal_string()
 
-def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
+def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
     global SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER, SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER
     global debug_flags
 
@@ -175,6 +175,8 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
     t2 = 'headers ="row' + str(task_num) + ' timeUnit1" '
     if task_num == 1:
         t3 = 'class="firstSchedColCell">'
+    elif task_num == num_tasks:
+        t3 = 'class="lastSchedColCell">'
     else:
         t3 = 'class="schedColCell">'
     # end_if
@@ -281,8 +283,8 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
     
     # Generation of the <divs> for the schedule bars and milestones
     for item in big_list_sorted:
-        left = float(item['start'] - xlsInfo['first_schedule_col_ix']) *  minor_cell_width
         if item['type'] == 'bar':
+            left = float(item['start'] - xlsInfo['first_schedule_col_ix']) *  minor_cell_width
             num_subdivisions = item['end'] - item['start'] + 1
             width = num_subdivisions * minor_cell_width
             
@@ -308,8 +310,14 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
             htmlAcc.append(s)
         else:
             # Must be a 'milestone'
+            # 
+            # TBD: Do we need a slightly different calculation for value of 'left' for milestones than for schedule bars?
+            left = float(item['start'] - xlsInfo['first_schedule_col_ix']) *  minor_cell_width
+            # left = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width) - (12.5 * 0.75)
+            
             # Debug
             # print '*** Milestone: ' + item['milestone'] + ' start: ' + str(item['start']) +  ' ' + ' left = ' + str(left)
+            
             t1 = '<div class="schedElemDiv">'
             t2 = '<div class="deliverableCodeDiv" style="'
             t2 += 'left:' + str(left) + 'px;">'
@@ -335,7 +343,7 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo):
     htmlAcc.append(s)
 # end_def gen_ex1_task_tr_2nd_td()
 
-def gen_ex1_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo):
+def gen_ex1_task_tr(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
     s = '<tr>'
     htmlAcc.append(s)
       
@@ -343,6 +351,8 @@ def gen_ex1_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo):
     t1 = '<td id="row' + str(task_num) + '" headers="ex1taskTblHdr" '
     if task_num == 1:
         t2 = 'class="firstTaskTblCell">'
+    elif task_num == num_tasks:
+        t2 = 'class="lastTaskTblCell">'
     else:
         t2 = 'class="taskTblCell">'
     # end_if
@@ -367,7 +377,7 @@ def gen_ex1_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo):
     htmlAcc.append(s)
     
     # Second <td> in row: schedule bar(s) and deliverable(s), (if any)
-    gen_ex1_task_tr_2nd_td(htmlAcc, task_num, task_row_ix, xlsInfo)
+    gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo)
     
     # Close <tr>
     s = '</tr>'
@@ -380,9 +390,12 @@ def gen_ex1_schedule_table_body(htmlAcc, xlsInfo):
     htmlAcc.append(s)
     # Write the <tr>s in the table body
     i = 0
-    for task_row_ix in range(xlsInfo['task_list_top_row_ix']+1,xlsInfo['task_list_bottom_row_ix']):
+    first_task_ix = xlsInfo['task_list_top_row_ix']+1
+    last_task_ix = xlsInfo['task_list_bottom_row_ix']
+    num_tasks = last_task_ix - first_task_ix
+    for task_row_ix in range(first_task_ix, last_task_ix):
         i = i + 1
-        gen_ex1_task_tr(htmlAcc, i, task_row_ix, xlsInfo)
+        gen_ex1_task_tr(htmlAcc, i, num_tasks, task_row_ix, xlsInfo)
     # end_for
     # Close <tbody>
     s = '</tbody>'
@@ -597,7 +610,7 @@ def gen_ex2_direct_salary_div(htmlAcc, xlsInfo):
 # In order to expedite development/prototyping, however, it is currently defined here at scope-0.
 # When the tool has become stable, move it within the def of salary_cost_table_div.
 #
-def gen_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo, real_cols_info):
+def gen_ex2_task_tr(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo, real_cols_info):
     # Open <tr> element
     t1 = '<tr id='
     tr_id = 'taskHeader' + str(task_num)
@@ -610,7 +623,9 @@ def gen_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo, real_cols_info):
     t1 = '<td headers="taskTblHdr" scope="row" '
     if task_num == 1:
         t2  = 'class="firstTaskTblCell">'
-    else:
+    elif task_num == num_tasks:
+        t2  = 'class="lastTaskTblCell">'   
+    else: 
         t2 = 'class="taskTblCell">'
     # end_if
     s = t1 + t2 
@@ -678,7 +693,7 @@ def gen_task_tr(htmlAcc, task_num, task_row_ix, xlsInfo, real_cols_info):
     
     s = '</tr>'
     htmlAcc.append(s)
-# end_def gen_task_tr()
+# end_def gen_ex2_task_tr()
 
 ############################################################################
 # Top-level routine for generating HTML for Exhibit 2 salary cost table div.
@@ -793,9 +808,12 @@ def gen_ex2_salary_cost_table_div(htmlAcc, xlsInfo):
     #
     # Write <tr>s for each task in the task list.
     i = 0
-    for task_row_ix in range(xlsInfo['task_list_top_row_ix']+1,xlsInfo['task_list_bottom_row_ix']):
+    first_task_ix = xlsInfo['task_list_top_row_ix']+1
+    last_task_ix = xlsInfo['task_list_bottom_row_ix']
+    num_tasks = last_task_ix - first_task_ix
+    for task_row_ix in range(first_task_ix, last_task_ix):
         i = i + 1
-        gen_task_tr(htmlAcc, i, task_row_ix, xlsInfo, real_cols_info)
+        gen_ex2_task_tr(htmlAcc, i, num_tasks, task_row_ix, xlsInfo, real_cols_info)
     # end_for
     
     # The 'Total' row
