@@ -312,10 +312,11 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
             # Must be a 'milestone'
             # 
             # Question: Do we need a slightly different calculation for value of 'left' for milestones than for schedule bars
-            # left = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width) - (12.5 / 0.75)
+            left = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width) - (12.5 / 0.75)
             #
             # Answer: Rather, we calculate the 'right' attribute for the div sith class 'deliverableCodeDiv',
             #         taking care to add one minor_cell_width to the 'natural' left displacement.
+            #         Unfortunately, this doesn't appear to work, so we'll stick with the 'left' method.
             right = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width)
             
             # Debug
@@ -323,8 +324,8 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
             
             t1 = '<div class="schedElemDiv">'
             t2 = '<div class="deliverableCodeDiv" style="'
-            # t2 += 'left:' + str(left) + 'px;">'
-            t2 += 'right:' + str(right) + 'px;">'
+            t2 += 'left:' + str(left) + 'px;">'
+            # t2 += 'right:' + str(right) + 'px;">'
             
             # Firt bunch of stuff for screen reader
             t3 = '<div class="overflowHiddenTextDiv">Deliverable</div>'
