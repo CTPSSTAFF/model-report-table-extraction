@@ -1072,12 +1072,12 @@ def main(input_fullpath, output_dir):
         gen_exhibit_2(htmlAcc, xlsInfo)
         write_html_to_file(htmlAcc.get(), ex_2_out_html_fn)
     else:
-        print 'HTML generation aborted.\nErrors found when reading ' + fullpath + ':\n'
+        print 'HTML generation aborted.\nErrors found when reading ' + input_fullpath + ':\n'
         print xlsInfo['errors']        
     # end_if
     
     # Copy the two CSS files associated with the generated HTML page to the output directory.
-    tool_launch_dir = os.getcwd()
-    shutil.copy(tool_launch_dir + '\\ctps_work_scope.css', output_dir)
-    shutil.copy(tool_launch_dir + '\\ctps_work_scope_print.css', output_dir)
+    tool_dir = os.path.dirname(__file__)
+    shutil.copy(tool_dir + '\\ctps_work_scope.css', output_dir)
+    shutil.copy(tool_dir + '\\ctps_work_scope_print.css', output_dir)
 # end_def main()
