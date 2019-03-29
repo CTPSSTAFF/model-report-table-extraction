@@ -23,7 +23,8 @@
 # It was, however, intended to be as easy to understand by a 'newbie' as possible.
 #
 # Author: Benjamin Krepp
-# Date: 23-27 July, 30-31 July, 6-10 August 2018, 13 August 2018, 21 August 2018
+# Date: 23-27 July, 30-31 July, 6-10 August 2018, 13 August 2018, 21 August 2018,
+#       29 March 2019
 #   
 # Internals of this Module: Top-level Functions
 # =============================================
@@ -111,6 +112,7 @@ import sys
 import math
 import re
 import openpyxl
+import shutil
 from bs4 import BeautifulSoup
 from excelFileManager import initExcelFile, get_column_index, get_row_index, get_cell_contents, \
                              get_last_used_sched_column, MAGIC_FILL_STYLE, \
@@ -1073,4 +1075,9 @@ def main(input_fullpath, output_dir):
         print 'HTML generation aborted.\nErrors found when reading ' + fullpath + ':\n'
         print xlsInfo['errors']        
     # end_if
+    
+    # Copy the two CSS files associated with the generated HTML page to the output directory.
+    tool_launch_dir = os.getcwd()
+    shutil.copy(tool_launch_dir + '\\ctps_work_scope.css', output_dir)
+    shutil.copy(tool_launch_dir + '\\ctps_work_scope_print.css', output_dir)
 # end_def main()
