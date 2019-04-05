@@ -153,9 +153,9 @@ class Frame(wx.Frame):
             dlg = wx.MessageDialog(None, message, caption, wx.OK | wx.ICON_INFORMATION)
             dlg.ShowModal()
             dlg.Destroy()
-            self.Destroy()
+            # self.Destroy()
         else:
-            self.Destroy()
+            # self.Destroy()
     # end_def OnGenerate()
 
     def OnAbout(self, event):
