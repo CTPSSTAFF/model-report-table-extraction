@@ -633,7 +633,8 @@ def gen_ex2_task_tr(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo, real_col
     if task_num == 1:
         t2  = 'class="firstTaskTblCell">'
     elif task_num == num_tasks:
-        t2  = 'class="lastTaskTblCell">'   
+        # t2  = 'class="lastTaskTblCell">'   
+        t2 = 'class="taskTblCell">' # last task row doesn't need special treatment--total row gets it instead--DK
     else: 
         t2 = 'class="taskTblCell">'
     # end_if
