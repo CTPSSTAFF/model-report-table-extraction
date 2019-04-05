@@ -155,6 +155,7 @@ class Frame(wx.Frame):
             dlg.Destroy()
             # self.Destroy()
         else:
+			pass
             # self.Destroy()
     # end_def OnGenerate()
 
