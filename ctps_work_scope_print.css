@@ -318,8 +318,9 @@
 		height: 12pt;
 		overflow: hidden;
 		zoom: 1;
-		position: absolute;
-        left: 1000px;
+		*display: inline;
+		/* position: absolute;
+        left: 1000px; */
 	}
 	.scheduleBar	{
 		position:relative;

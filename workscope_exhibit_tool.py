@@ -124,9 +124,9 @@ debug_flags['dump_sched_elements'] = False
 
 # Global pseudo-constants:
 # Width of table HEADER cells in the schedule table
-SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER = 33.9375
+SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER = 34.6875 # 33.9375
 SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER = (SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER * 1.3333)
-SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER = 16.59375
+SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER = 17.34375 # 16.59375
 SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER = (SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER * 1.3333)
 
 
@@ -271,9 +271,9 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
     #     4. the number of minor schedule units per major schedule unit in the input .xlsx file
     
     if xlsInfo['num_sched_col_header_cells'] <= 12:
-        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PX_12PX_BORDER
+        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PTS_12PX_BORDER
     else:
-        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER
+        hdr_cell_width = SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER
     # end_if
 
     # Width of 'virtual' cell for one subdivision of the major schedule unit
@@ -286,17 +286,17 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
     # Generation of the <divs> for the schedule bars and milestones
     for item in big_list_sorted:
         if item['type'] == 'bar':
-            left = float(item['start'] - xlsInfo['first_schedule_col_ix']) *  minor_cell_width
+            left = float(item['start'] - xlsInfo['first_schedule_col_ix']) *  minor_cell_width - 1
             num_subdivisions = item['end'] - item['start'] + 1
-            width = num_subdivisions * minor_cell_width
+            width = num_subdivisions * minor_cell_width - 1
             
             # Debug
             # print '*** Task #' + str(task_num) +  ' start: ' + str(item['start']) + ' end: ' + str(item['end']) + ' ' + ' left = ' + str(left) + ' width = ' + str(width)
             
             t1 = '<div class="schedElemDiv">'
             t2 = '<div class="scheduleBar" style="'
-            t2 += 'left:' + str(left) + 'px;'
-            t2 += 'width:' + str(width) + 'px'
+            t2 += 'left:' + str(left) + 'pt;'
+            t2 += 'width:' + str(width) + 'pt'
             t2 += '">'
             # Stuff for screen reader
             t3 = '<div class="overflowHiddenTextDiv">'
@@ -314,7 +314,7 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
             # Must be a 'milestone'
             # 
             # Question: Do we need a slightly different calculation for value of 'left' for milestones than for schedule bars
-            left = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width) - (12.5 / 0.75)
+            left = ((float(item['start'] - xlsInfo['first_schedule_col_ix']) + 1.0) *  minor_cell_width) - 12.5
             #
             # Answer: Rather, we calculate the 'right' attribute for the div sith class 'deliverableCodeDiv',
             #         taking care to add one minor_cell_width to the 'natural' left displacement.
@@ -326,7 +326,7 @@ def gen_ex1_task_tr_2nd_td(htmlAcc, task_num, num_tasks, task_row_ix, xlsInfo):
             
             t1 = '<div class="schedElemDiv">'
             t2 = '<div class="deliverableCodeDiv" style="'
-            t2 += 'left:' + str(left) + 'px;">'
+            t2 += 'left:' + str(left) + 'pt;">'
             # t2 += 'right:' + str(right) + 'px;">'
             
             # Firt bunch of stuff for screen reader
