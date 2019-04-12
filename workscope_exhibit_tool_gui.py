@@ -10,7 +10,7 @@
 # Date: 1 August, 21 August 2018
 #
 
-import wx, wx.html
+import wx, wx.html, sys
 from workscope_exhibit_tool import main
 
 # Code for the application's GUI begins here.
@@ -127,6 +127,7 @@ class Frame(wx.Frame):
         self.xlsxFileName = openFileDialog.GetPath()
         self.m_text.SetLabel("Selected input Excel file:\n" + self.xlsxFileName)
         openFileDialog.Destroy()
+        frame.Destroy()
     # end_def OnSelectFile()
     
     def OnSelectOutputDir(self, event):
@@ -138,6 +139,7 @@ class Frame(wx.Frame):
         self.outputDirName = dlg.GetPath()
         self.m_text_2.SetLabel("Selected output directory:\n" + self.outputDirName)
         dlg.Destroy()
+        frame.Destroy()
     # end_def OnSelectOutputDir()   
     
     def OnGenerate(self, event):

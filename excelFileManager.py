@@ -570,5 +570,6 @@ def initExcelFile(fullpath):
     # print '*** num_major_sched_units : ' + str(num_major_sched_units)
     
     retval['num_sched_col_header_cells'] = num_major_sched_units
+    wb.close()
     return retval
 # end_def initExcelFile()
