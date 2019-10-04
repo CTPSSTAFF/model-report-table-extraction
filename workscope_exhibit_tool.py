@@ -24,7 +24,7 @@
 #
 # Author: Benjamin Krepp
 # Date: 23-27 July, 30-31 July, 6-10 August 2018, 13 August 2018, 21 August 2018,
-#       29 March 2019
+#       29 March 2019, 13 September 2019
 #   
 # Internals of this Module: Top-level Functions
 # =============================================
@@ -130,9 +130,13 @@ SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER = 17.34375 # 16.59375
 SCHED_HEADER_CELL_WIDTH_IN_PX_24PX_BORDER = (SCHED_HEADER_CELL_WIDTH_IN_PTS_24PX_BORDER * 1.3333)
 
 
-# Person weeks are formatted as a floating point number with one digit of precision.
+# Person weeks are formatted and returned as the string representation of a floating point number with one digit of precision.
 def format_person_weeks(person_weeks):
-    retval = "%.1f" % person_weeks
+    if str(person_weeks) == ' ' or str(person_weeks) == '':
+        retval = '0.0'
+    else:
+        retval = "%.1f" % person_weeks
+    # end_if
     return retval
 # end_def format_person_weeks()
 
@@ -140,7 +144,11 @@ def format_person_weeks(person_weeks):
 # i.e., as an integer, but also with commas as the thousands delimiter.
 # Note: This function does NOT prepend a '$' symbol to the string returned.
 def format_dollars(dollars):
-    retval = '{0:,.0f}'.format(dollars)
+    if str(dollars) == ' ' or str(dollars) == '':
+        retval = '0'
+    else:
+        retval = '{0:,.0f}'.format(dollars)
+    # end_if
     return retval
 # end_def format_dollars()
 
@@ -473,8 +481,29 @@ def gen_ex1_schedule_table(htmlAcc, xlsInfo):
     gen_ex1_schedule_table_body(htmlAcc, xlsInfo)
 # end_def gen_ex1_schedule_table()
 
-
+# Note that if there are no "milestones/deliverables" listed, this function does NOT generate a "milestoneDiv".
 def gen_ex1_milestone_div(htmlAcc, xlsInfo):
+    # Dumb little predicate to return True if string is empty or only contains blanks, False otherwise.
+    def is_empty(s):
+        return s.strip() == ''
+    # end_def is_empty()
+    
+    # Get the indices of the first and last row of milestone data.
+    first_milestone_ix = xlsInfo['milestone_list_first_row_ix']
+    # Find the last row of the milestones list: crawl down milestone_label_column
+    # until the first row containing an 'empty' cell is found. 
+    last_milestone_ix = first_milestone_ix + 1
+    while is_empty(get_cell_contents(xlsInfo['ws'], last_milestone_ix, xlsInfo['milestone_label_col_ix'])) == False:
+        last_milestone_ix += 1
+    # end_while   
+
+    # Here: if last_milestone_ix == first_milestone_ix + 1, no milestones were listed.
+    # If this is the case, do not generate the milestoneDiv - just return.
+    if last_milestone_ix == first_milestone_ix + 1:
+        return
+    # end_if
+    
+    # Here: the list of milestones is non-empty; generate the milestoneDiv.
     s = '<div id="milestoneDiv">'
     htmlAcc.append(s)
     s = '<div id="milestoneHdrDiv">'
@@ -488,20 +517,7 @@ def gen_ex1_milestone_div(htmlAcc, xlsInfo):
     # The general form of the 'list' (but it's not an HTML <list>) of deliverables is:
     #   <span class="label"> LETTER_CODE_FOR_DELIVERABLE </span> NAME_OF_DELIVERABLE <br>
     # Example:
-    #   <span class="label"> A: </span> Memo to MPO with initial findings <br>
-    
-    # Dumb little predicate to return True if string is empty or only contains blanks, False otherwise.
-    def is_empty(s):
-        return s.strip() == ''
-    # end_def is_empty()
-    
-    first_milestone_ix = xlsInfo['milestone_list_first_row_ix']
-    # Find the last row of the milestones list: crawl down milestone_label_column
-    # until the first row containing an 'empty' cell is found. 
-    last_milestone_ix = first_milestone_ix + 1
-    while is_empty(get_cell_contents(xlsInfo['ws'], last_milestone_ix, xlsInfo['milestone_label_col_ix'])) == False:
-        last_milestone_ix += 1
-    # end_while
+    #   <span class="label"> A: </span> Memo to MPO with initial findings <br>    
     
     for milestone_ix in range(first_milestone_ix, last_milestone_ix):
         t1 = '<span class="label">'
