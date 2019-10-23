@@ -495,11 +495,11 @@ def gen_ex1_milestone_div(htmlAcc, xlsInfo):
     last_milestone_ix = first_milestone_ix + 1
     while is_empty(get_cell_contents(xlsInfo['ws'], last_milestone_ix, xlsInfo['milestone_label_col_ix'])) == False:
         last_milestone_ix += 1
-    # end_while   
+    # end_while 
 
-    # Here: if last_milestone_ix == first_milestone_ix + 1, no milestones were listed.
+    # Here: if last_milestone_ix == first_milestone_ix + 1 AND the contents of the "first_milestone_ix" cell is empty, no milestones were listed.
     # If this is the case, do not generate the milestoneDiv - just return.
-    if last_milestone_ix == first_milestone_ix + 1:
+    if last_milestone_ix == first_milestone_ix + 1 and is_empty(get_cell_contents(xlsInfo['ws'], first_milestone_ix, xlsInfo['milestone_label_col_ix'])) == True:
         return
     # end_if
     
