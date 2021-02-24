@@ -2,11 +2,11 @@
 Python tool and accompanying Access database to streamline extraction of tabular data from CTPS model-generated report file in PRN (columnar) text format.
 
 ## Installation
-You must install Python version 3 or higher. You can obtain Python be going to https://www.python.org/downloads/.
+You must install Python version 3 or higher. You can obtain Python by going to https://www.python.org/downloads/.
 
 This tool also requires installation of a Python library called wxPython, which supports user interface elements native to the Windows (or other) operating system. Once you have installed Python itself, you can add the wxPython library by opening a command window (in Windows, click the Windows button in the start bar and type "command prompt" in the search box) and entering the command `python -m pip install wxPython`.
 
-The last step is to get the tool files themselves onto your system. If you are viewing this README on the GitHub.com website, the easiest way to do this is to download a zip file of the project by clicking the green "Code" button and choosing "Download ZIP." Extract the downloaded zip file to the folder of your choice.
+The last step in installation is to get the tool files themselves onto your system. If you are viewing this README on the GitHub.com website, the easiest way to do this is to download a zip file of the project by clicking the green "Code" button and choosing "Download ZIP." Extract the downloaded zip file to the folder of your choice.
 
 ## Usage
 There are two main steps to use the tool:
@@ -23,7 +23,7 @@ In the file browser (Windows Explorer) find the Python script model_report_table
 Open the (mostly) empty Access database model_report_table_extraction.accdb. Activate the "External Data" ribbon and click "Saved Imports" to open the saved imports window. There is a saved import for each temporary table. For each one, perform the following steps.
 1. Click on the file path that begins "C:\Users\dknudsen" and edit it so that the path specifies the actual location of the temporary file from the Python script that is to be loaded.
 2. Click the "Run" button.
-
+ 
 ### Export the Access tables for use in other software
 Once your desired tables have been added to Access, you can right-click on any of them, open the "Export" sub-menu, and choose
 - "Excel" to export the table to an Excel file
