@@ -12,7 +12,7 @@ The last step in installation is to get the tool files themselves onto your syst
 There are two main steps to use the tool:
 1. Run the Python script model_report_table_extraction_gui.py to break out the data-containing lines from certain tables found in the PRN file.
 2. Open the Access database and run the "saved imports" in turn to ingest the files output from the previous step and convert them to Access tables
-
+ 
 ### Run the Python script
 In the file browser (Windows Explorer) find the Python script model_report_table_extraction_gui.py that you downloaded during installation and double-click it to launch it. In the dialog window that appears work your way through each of the three buttons:
 1. Select model report PRN file. Use the file dialog window to locate and select the model report file from which you wish to extract tables.
