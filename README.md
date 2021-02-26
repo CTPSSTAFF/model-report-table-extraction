@@ -4,7 +4,7 @@ Python tool and accompanying Access database to streamline extraction of tabular
 ## Installation
 You must install Python version 3 or higher. You can obtain Python by going to https://www.python.org/downloads/.
 
-This tool also requires installation of a Python library called wxPython, which supports user interface elements native to the Windows (or other) operating system. Once you have installed Python itself, you can add the wxPython library by opening a command window (in Windows, click the Windows button in the start bar and type "command prompt" in the search box) and entering the command `python -m pip install wxPython`.
+This tool also requires installation of a Python library called wxPython, which supports user interface elements native to the Windows (or other) operating system. Once you have installed Python itself, you can add the wxPython library by opening a command window (in Windows, click the Windows button in the start bar and type "command prompt" in the search box) and entering the command `"[full path to python.exe on your system]\python.exe" -m pip install wxPython`. Replace the brackets and the text within them with the actual location of the python executable on your computer, and include the quotation marks as shown, in case there are spaces in any of the folder names.
 
 The last step in installation is to get the tool files themselves onto your system. If you are viewing this README on the GitHub.com website, the easiest way to do this is to download a zip file of the project by clicking the green "Code" button and choosing "Download ZIP." Extract the downloaded zip file to the folder of your choice.
 
@@ -16,7 +16,7 @@ There are two main steps to use the tool:
 ### Run the Python script
 In the file browser (Windows Explorer) find the Python script model_report_table_extraction_gui.py that you downloaded during installation and double-click it to launch it. In the dialog window that appears work your way through each of the three buttons:
 1. Select model report PRN file. Use the file dialog window to locate and select the model report file from which you wish to extract tables.
-2. Specify output directory. Use the file dialog window to locate and select the folder where temporary files for the tables will be created. You may choose to use the same folder where the model report file itself is stored. The temporary files have fixed names of the form <table number>.txt, and will overwrite any files of the same name that already exist in the folder.
+2. Specify output directory. Use the file dialog window to locate and select the folder where temporary files for the tables will be created. You may choose to use the same folder where the model report file itself is stored. The temporary files have fixed names of the form [table number].txt, and will overwrite any files of the same name that already exist in the folder.
 3. Break out separate table files. Click "OK" to start the processing.
 
 ### Import the temporary table files to Access
