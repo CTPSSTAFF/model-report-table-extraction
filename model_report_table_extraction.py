@@ -82,6 +82,6 @@ def extract_table_to_file(prn_file, table, out_file):
 def main(prn_file, output_dir, tables):
     
 	for table in tables:
-		extract_table_to_file(prn_file, table, os.path.join(output_dir, table) + ".txt")
+		extract_table_to_file(prn_file, table, os.path.join(output_dir, table.replace('.','-')) + ".txt")
 		
 # end_def main()
